@@ -17,3 +17,4 @@
 ### ▼参考にした記事
 [Firebaseの始め方](https://qiita.com/kohashi/items/43ea22f61ade45972881)  
 [Firebaseによるプッシュ通知](https://qiita.com/mituoh/items/2dc87618edf234afd8f0)
+[クリックした時に音を出す](https://syncer.jp/html5-javascript-hello-button)

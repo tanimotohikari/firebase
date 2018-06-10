@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>String Count</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.0.4/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.0.4/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.0.4/firebase-database.js"></script>
+    <script defer src="/__/firebase/5.0.4/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/5.0.4/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <link rel="stylesheet" href="./css/reset.css">
+
+    <style media="screen">
+      body {
+        background: #ECEFF1;
+        color: rgba(0, 0, 0, .87);
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .counter {
+        background-color: #fff;
+        max-width: 360px;
+        margin: 100px auto 16px;
+        padding: 32px 24px;
+        border-radius: 3px;
+      }
+      .counter h2 {
+        color: #ffa100;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+      .counter h1 {
+        font-size: 22px;
+        font-weight: 300;
+        color: rgba(0, 0, 0, .6);
+      }
+      .counter p {
+        line-height: 140%;
+        font-size: 14px;
+      }
+
+      .counter,
+      .counter-btn {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+      }
+
+      .counter-btn {
+        display: block;
+        text-align: center;
+        background: #039be5;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #fff;
+        padding: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      #load {
+        color: rgba(0, 0, 0, .4);
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .full {
+        width: 100%;
+      }
+
+      .layout-bottom-small {
+        margin-bottom: 10px;
+      }
+
+      .layout-bottom {
+        margin-bottom: 20px;
+      }
+
+      .layout-bottom-large {
+        margin-bottom: 30px;
+      }
+
+      .input-text {
+        width: 100%;
+        padding: 10px;
+      }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCZZs7mJDIpk1tenAuSDKzIUxm0F1BJX-E",
+        authDomain: "firstfirebase-192d3.firebaseapp.com",
+        databaseURL: "https://firstfirebase-192d3.firebaseio.com",
+        projectId: "firstfirebase-192d3",
+        storageBucket: "firstfirebase-192d3.appspot.com",
+        messagingSenderId: "1026171377430"
+      };
+      firebase.initializeApp(config);
+    </script>
+  </head>
+  <body>
+    <div class="counter">
+      <h1 class='layout-bottom'>文字数げーむ</h1>
+      <p class='layout-bottom'>テーマに沿った単語を入力して文字数の多い方が勝利：国の名前</p>
+      <p id='js-timer'>10</p>
+      <ul>
+        <li class='layout-bottom-small' id="js-input-answer">日本</li>
+        <li class='layout-bottom'><input class='input-text' type="text" name="" id="js-input-text"></li>
+        <li><a class='counter-btn' onclick="changeData()">解答</a></li>
+      </ul>
+    </div>
+
+
+    <script>
+      var db = firebase.database();
+      var country = db.ref('/input/country');
+      var timer = 10;
+
+      setInterval('countDown()',1000);
+
+      function changeData() {
+        var inputCountryName = document.getElementById('js-input-text').value;
+        var nawWordCount = inputCountryName.length;
+        var oldWordCount,nawCountryName;
+
+        country.on("value", function(snapshot) {
+          oldWordCount = snapshot.val().wordCount;
+          oldCountryName = snapshot.val().countryName;
+        });
+
+        nawWordCount > oldWordCount? setDate(inputCountryName, nawWordCount) : setDate(oldCountryName, oldWordCount);
+        nawWordCount < oldWordCount? notice() : '';
+      }
+
+      function setDate(countryName, textCount) {
+        country.set({countryName:countryName, wordCount:textCount});
+      }
+
+      function notice() {
+        alert('あほ、言うな！');
+      }
+
+      function countDown() {
+        timer--;
+        document.getElementById("js-timer").innerText = timer;
+        timer < 0? countReset() : '';
+      }
+
+      function countReset() {
+        document.getElementById("js-timer").innerText = 10;
+      }
+
+      country.on("value", function(snapshot) {
+        document.getElementById("js-input-answer").innerText = snapshot.val().countryName;
+      });
+    </script>
+  </body>
+</html>
