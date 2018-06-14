@@ -3,21 +3,47 @@
 <meta charset='utf-8'>
 <meta name='viewport' content='width=360, initial-scale=1'>
 <title>OX GAME</title>
+<style>[v-cloak] {display:none;}</style>
 </head>
 <body>
 <p><a href='index.html'>TOPへ戻る</a></p>
-<div id='app'>
-  <router-view></router-view>
+<div id='main' v-cloak>
+  <div :class='{dispoff: view != "lobby"}'>
+    <p class='layout-bottom text-large'>OX GAME</p>
+    <p class='layout-bottom'><button class='full' @click='createRoom'>Create Room!</button></p>
+    <p><input class='input-id' type='text' maxlength='4' v-model='roomId' placeholder='Room ID'><button class='input-id-btn' @click='goRoom'>Go!</button></p>
+  </div>
+
+  <div :class='{dispoff: view != "game"}'>
+    <div>
+      <div>
+      <div v-for='i in 3' class='row'>
+        <div v-for='j in 3' class='col' @click='put(i, j)'>{{parseOX(sync.board[i][j])}}</div>
+      </div>
+      </div>
+    </div>
+    <div>
+      <p>
+      Room ID: {{roomId}}<br>
+      Your Mark: {{parseOX(mark)}}<br>
+      Turn: {{parseOX(sync.turn)}}<br>
+      </p>
+    </div>
+  </div>
+
 </div>
+<!-- update the version number as needed -->
 <script defer src='/__/firebase/4.6.0/firebase-app.js'></script>
+<!-- include only the Firebase features as you need -->
 <script defer src='/__/firebase/4.6.0/firebase-auth.js'></script>
 <script defer src='/__/firebase/4.6.0/firebase-database.js'></script>
 <script defer src='/__/firebase/4.6.0/firebase-messaging.js'></script>
 <script defer src='/__/firebase/4.6.0/firebase-storage.js'></script>
+<!-- initialize the SDK after all desired features are loaded -->
 <script src='https://unpkg.com/vue'></script>
 <script defer src='/__/firebase/init.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js'></script>
-<script src='/dst/js/app.js'></script>
+<script src='/js/ox.js'></script>
 
 <style>
 * {
